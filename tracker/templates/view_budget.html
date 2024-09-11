@@ -1,0 +1,13 @@
+{% extends 'tracker/base.html' %}
+
+{% block title %}View Budget{% endblock %}
+
+{% block content %}
+<h2>Budget Overview</h2>
+<ul>
+    {% for budget in budgets %}
+    <li>{{ budget.category }}: {{ budget.amount }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+

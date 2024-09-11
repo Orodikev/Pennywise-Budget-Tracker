@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=2.0">
+    <title>{% block title %}Pennywise Budget Tracker{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Pennywise Budget Tracker</h1>
+        <nav>
+            <ul>
+	{% if user.is_authenticated %}    
+                <li><a href="{% url 'transaction_list' %}">Home</a></li>
+                <li><a href="{% url 'add_transaction' %}">Add Transaction</a></li>
+                <li><a href="{% url 'view_budget' %}">View Budget</a></li>
+	{% else %}
+       		 <li><a href="{% url 'login' %}">Login</a></li>
+       		 <li><a href="{% url 'register' %}">Register</a></li>
+	 {% endif %}
+	    </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer class="footer"class="footer" >
+        <p>&copy; 2024 Pennywise Budget Tracker</p>
+    </footer>
+    <style>
+    .footer {
+        width: 100%; /* Adjust this percentage to reduce the width */
+        margin: 10 auto; /* Center the footer */
+        background-color: #ff0000; /* Optional: Set a background color */
+        padding: 10px; /* Optional: Add some padding */
+        text-align: center; /* Optional: Center the text */
+    }
+</style>
+</body>
+</html>
+

@@ -1,0 +1,11 @@
+{% extends 'tracker/base.html' %}
+
+{% block content %}
+<h1>Welcome to PennyWise-Tracker</h1>
+
+<ul>
+    <li><a href="{% url 'add_transaction' %}">Add Transaction</a></li>
+    <li><a href="{% url 'view_budget' %}">View Budget</a></li>
+</ul>
+{% endblock %}
+
