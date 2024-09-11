@@ -8,7 +8,7 @@ from .views import RegisterView
 
 urlpatterns = [
     path('', views.landing_page, name='landing_page'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/', views.dashboard_view, name='dashboard'),
     path('login/', login, name='login'),
     path('register/', register, name='register'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
@@ -18,4 +18,7 @@ urlpatterns = [
     path('api/transactions/', TransactionListCreateAPIView.as_view(), name='api_transactions'),
     path('api/budgets/', BudgetListCreateAPIView.as_view(), name='api_budgets'),
     path('register/', RegisterView.as_view(), name='register'),
+    path('transaction-management/', views.transaction_management_view, name='transaction_management'),
+    path('budget-management/', views.budget_management_view, name='budget_management'),
+    path('get-report/', views.get_report_view, name='get_report'),
 ]

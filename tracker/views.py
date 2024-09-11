@@ -15,9 +15,11 @@ from django.views import generic
 
 def login(request):
     return render(request, 'login.html')
+
 @login_required
-def dashboard(request):
-    return render(request, 'tracker/dashboard.html')
+def dashboard_view(request):
+    return render(request, 'dashboard.html')
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -31,10 +33,12 @@ def register(request):
     return render(request, 'register.html', {'form': form})
 def landing_page(request):
     return render(request, 'landing.html')
+
 @login_required
 def transaction_list(request):
     transactions = Transaction.objects.filter(user=request.user)
     return render(request, 'tracker/transaction_list.html', {'transactions': transactions})
+
 @login_required
 #Add Transaction view
 def add_transaction(request):
@@ -48,11 +52,23 @@ def add_transaction(request):
     else:
         form = TransactionForm()
     return render(request, 'tracker/add_transaction.html', {'form': form})
+
 #Budget view
 @login_required
 def view_budget(request):
     budgets = Budget.objects.filter(user=request.user)
     return render(request, 'tracker/view_budget.html', {'budgets': budgets})
+# View for Transaction Management
+def transaction_management_view(request):
+    return render(request, 'transaction_management.html')
+
+# View for Budget Management
+def budget_management_view(request):
+    return render(request, 'budget_management.html')
+
+# View for Get Report
+def get_report_view(request):
+    return render(request, 'get_report.html')
 #API Views
 class TransactionListCreateAPIView(generics.ListCreateAPIView):
     queryset = Transaction.objects.all()

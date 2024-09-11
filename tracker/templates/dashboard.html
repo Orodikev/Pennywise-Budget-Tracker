@@ -1,11 +1,66 @@
-{% extends 'tracker/base.html' %}
-
 {% block content %}
-<h1>Welcome to PennyWise-Tracker</h1>
+{% load static %}
 
-<ul>
-    <li><a href="{% url 'add_transaction' %}">Add Transaction</a></li>
-    <li><a href="{% url 'view_budget' %}">View Budget</a></li>
-</ul>
+<style>
+    body {
+        background-image: url("{% static 'images/background-image.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .dashboard-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .dashboard-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .dashboard-card {
+        width: 300px;
+        height: 300px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .dashboard-card img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .dashboard-card h3 {
+        margin-top: 10px;
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="dashboard-section">
+        <div class="dashboard-card">
+            <img src="{% static 'images/budget_icon.jpg' %}" alt="Budget Icon">
+            <h3>Budget Management</h3>
+        </div>
+        <div class="dashboard-card">
+            <img src="{% static 'images/transaction_icon.png' %}" alt="Transaction Icon">
+            <h3>Transaction Management</h3>
+        </div>
+        <div class="dashboard-card">
+            <img src="{% static 'images/report_icon.png' %}" alt="Report Icon">
+            <h3>Get Report</h3>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
