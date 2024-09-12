@@ -34,6 +34,14 @@
         justify-content: center;
         align-items: center;
         text-align: center;
+        text-decoration: none;
+        color: #000;
+        transition: transform 0.2s;
+    }
+
+    .dashboard-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     }
 
     .dashboard-card img {
@@ -48,19 +56,31 @@
 
 <div class="dashboard-container">
     <div class="dashboard-section">
-        <div class="dashboard-card">
-            <img src="{% static 'images/budget_icon.jpg' %}" alt="Budget Icon">
-            <h3>Budget Management</h3>
-        </div>
-        <div class="dashboard-card">
-            <img src="{% static 'images/transaction_icon.png' %}" alt="Transaction Icon">
-            <h3>Transaction Management</h3>
-        </div>
-        <div class="dashboard-card">
-            <img src="{% static 'images/report_icon.png' %}" alt="Report Icon">
-            <h3>Get Report</h3>
-        </div>
+        <!-- Budget Management -->
+        <a href="{% url 'budget_management' %}" class="dashboard-card">
+            <div>
+                <img src="{% static 'images/budget_icon.jpg' %}" alt="Budget Icon">
+                <h3>Budget Management</h3>
+            </div>
+        </a>
+
+        <!-- Transaction Management -->
+        <a href="{% url 'transaction_management' %}" class="dashboard-card">
+            <div>
+                <img src="{% static 'images/transaction_icon.png' %}" alt="Transaction Icon">
+                <h3>Transaction Management</h3>
+            </div>
+        </a>
+
+        <!-- Get Report -->
+        <a href="{% url 'get_report' %}" class="dashboard-card">
+            <div>
+                <img src="{% static 'images/report_icon.png' %}" alt="Report Icon">
+                <h3>Get Report</h3>
+            </div>
+        </a>
     </div>
 </div>
+
 {% endblock %}
 
