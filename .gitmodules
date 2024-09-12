@@ -1,0 +1,4 @@
+[submodule "Pennywise-Budget-Tracker"]
+    path = Pennywise-Budget-Tracker
+    url = https://github.com/Orodikev/Pennywise-Budget-Tracker.git
+
