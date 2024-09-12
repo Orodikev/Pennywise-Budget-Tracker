@@ -1,4 +1,27 @@
- <!-- Hero Section -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pennywise - Your Personal Budget Tracker</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header-section">
+        <img src="{% static 'images/logop.png' %}" alt="Pennywise Logo" class="logo">
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
     <section class="hero-section">
         <img src="{% static 'images/hero-money.png' %}" alt="Hero Image" class="hero-image">
         <h1>Welcome to Pennywise</h1>
@@ -44,4 +67,3 @@
     </footer>
 </body>
 </html>
-
