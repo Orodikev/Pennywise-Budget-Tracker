@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 from django.contrib.auth.models import User
 
 class Category(models.Model):
@@ -16,15 +17,25 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+# Transaction model
 class Transaction(models.Model):
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    # Fields for the transaction
     date = models.DateField()
-    description = models.TextField(null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    category = models.CharField(max_length=50)
 
+    # Unique reference number for each transaction
+    ref_number = models.CharField(max_length=100, unique=True, blank=True, null=True)
+
+    # Overriding the save method to generate a unique ref_number if not provided
+    def save(self, *args, **kwargs):
+        if not self.ref_number:
+            self.ref_number = str(uuid.uuid4())  # Generate a unique UUID for ref_number
+        super(Transaction, self).save(*args, **kwargs)
+
+    # String representation of the model
     def __str__(self):
-        return f'{self.amount} - {self.category.name} on {self.date}'
+        return f"Transaction {self.ref_number}: {self.category} - {self.amount} on {self.date}"
 
 class Budget(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)

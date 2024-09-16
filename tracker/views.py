@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Transaction, Budget
 from .forms import TransactionForm
 from rest_framework import generics
@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
+from django.http import HttpResponseRedirect
+import uuid
 
 # Create your views here.
 #List Transaction view
@@ -39,31 +41,76 @@ def transaction_list(request):
     transactions = Transaction.objects.filter(user=request.user)
     return render(request, 'tracker/transaction_list.html', {'transactions': transactions})
 
-@login_required
-#Add Transaction view
-def add_transaction(request):
-    if request.method == 'POST':
+#Transaction management view
+def transaction_management(request):
+    # Add Transaction logic
+    if request.method == 'POST' and 'add_transaction' in request.POST:
         form = TransactionForm(request.POST)
         if form.is_valid():
-            transaction = form.save(commit=False)
-            transaction.user = request.user
-            transaction.save()
-            return redirect('transaction_list')
+            form.save()
+            return redirect('transaction_management')
+
+    # View all transactions
+    transactions = Transaction.objects.all()
+
+    context = {
+        'transactions': transactions,
+        'form': TransactionForm(),
+    }
+    return render(request, 'transaction_management.html', context)
+
+def edit_transaction(request, id):
+    # Fetch the transaction object or return a 404 if not found
+    transaction = get_object_or_404(Transaction, id=id)
+
+    # If this is a POST request, process the form data
+    if request.method == 'POST':
+        form = TransactionForm(request.POST, instance=transaction)
+        if form.is_valid():
+            form.save()  # Save the updated transaction
+            return redirect('transaction_management')  # Redirect to transaction management page
+
+    # If this is a GET request, display the form prefilled with the transaction details
     else:
-        form = TransactionForm()
-    return render(request, 'tracker/add_transaction.html', {'form': form})
+        form = TransactionForm(instance=transaction)
+
+    # Render the form for editing the transaction
+    return render(request, 'edit_transaction.html', {'form': form})
+
+def delete_transaction(request, id):
+    # Fetch the transaction object by ID or return a 404 if not found
+    transaction = get_object_or_404(Transaction, id=id)
+
+    # If the request method is POST, delete the transaction
+    if request.method == 'POST':
+        transaction.delete()
+        return redirect('transaction_management')  # Redirect to transaction management page
+
+    # Render a confirmation page (optional)
+    return render(request, 'delete_transaction.html', {'transaction': transaction})
+
+def add_transaction(request):
+    if request.method == 'POST':
+        date = request.POST['date']
+        amount = request.POST['amount']
+        category = request.POST['category']
+
+        # Create a new Transaction instance without specifying the ref_number
+        transaction = Transaction(date=date, amount=amount, category=category)
+        transaction.save()  # This will automatically generate a unique ref_number
+
+        return redirect('transaction_management')
+
+    # Render the template for adding a transaction
+    return render(request, 'add_transaction.html')
 
 #Budget view
 @login_required
 def view_budget(request):
     budgets = Budget.objects.filter(user=request.user)
     return render(request, 'tracker/view_budget.html', {'budgets': budgets})
-# View for Transaction Management
-def transaction_management_view(request):
-    return render(request, 'transaction_management.html')
-
 # View for Budget Management
-def budget_management_view(request):
+def budget_management(request):
     return render(request, 'budget_management.html')
 
 # View for Get Report

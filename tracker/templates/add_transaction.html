@@ -1,13 +1,5 @@
-{% extends 'tracker/base.html' %}
-
-{% block title %}Add Transaction{% endblock %}
-
-{% block content %}
-<h2>Add Transaction</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Add</button>
+<form method="POST">
+    {% csrf_token %}  <!-- CSRF protection for security -->
+    {{ form.as_p }}    <!-- Display the form as paragraphs -->
+    <button type="submit">Add Transaction</button>  <!-- Submit button -->
 </form>
-{% endblock %}
-
