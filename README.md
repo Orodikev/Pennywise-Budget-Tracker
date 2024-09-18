@@ -25,3 +25,8 @@ Commit your changes (git commit -m "Add new feature").
 Push to the branch (git push origin feature-branch).
 Open a pull request and describe your changes in detail.
 Please make sure your code follows the project's coding conventions and includes tests where necessary.
+
+
+![Alt text](./Screenshots/Pennywise_transaction_management.png)
+
+
