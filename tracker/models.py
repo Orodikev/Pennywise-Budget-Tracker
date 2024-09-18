@@ -1,6 +1,7 @@
 from django.db import models
-import uuid
-from django.contrib.auth.models import User
+import uuid # Import for generating unique reference ID
+from django.contrib.auth.models import User 
+from datetime import date # To default the date to today's date
 
 class Category(models.Model):
     INCOME = 'income'
@@ -18,25 +19,32 @@ class Category(models.Model):
         return self.name
 
 # Transaction model
+CATEGORY_CHOICES = [
+    ('food', 'Food'),
+    ('rent', 'Rent'),
+    ('transport', 'Transport'),
+    ('shopping', 'Shopping'),
+    ('clothing', 'Clothing'),
+    ('medication', 'Medication'),
+]
+
+# Transaction model with fields: ref_id, amount, date, category
 class Transaction(models.Model):
-    # Fields for the transaction
-    date = models.DateField()
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    category = models.CharField(max_length=50)
+   # ref_id = models.CharField(max_length=100, unique=True, editable=False)  # Auto-generated reference ID
+    ref_id = models.IntegerField(default=0)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # Amount of transaction
+    date = models.DateField(default=date.today)  # Transaction date, default is today
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)  # Category selection with predefined choices
 
-    # Unique reference number for each transaction
-    ref_number = models.CharField(max_length=100, unique=True, blank=True, null=True)
-
-    # Overriding the save method to generate a unique ref_number if not provided
+    # Overriding the save method to generate a unique reference ID if it does not exist
     def save(self, *args, **kwargs):
-        if not self.ref_number:
-            self.ref_number = str(uuid.uuid4())  # Generate a unique UUID for ref_number
+        if not self.ref_id:
+            self.ref_id = str(uuid.uuid4()).split('-')[0]  # Generate a short UUID for ref_id
         super(Transaction, self).save(*args, **kwargs)
 
-    # String representation of the model
+    # Return a string representation of the transaction
     def __str__(self):
-        return f"Transaction {self.ref_number}: {self.category} - {self.amount} on {self.date}"
-
+        return f"{self.ref_id} - {self.amount}"
 class Budget(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     start_date = models.DateField()

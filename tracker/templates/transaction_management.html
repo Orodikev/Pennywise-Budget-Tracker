@@ -1,59 +1,18 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<h1>Transaction Management</h1>
-
-<!-- Navigation -->
-<div class="transaction-nav">
-    <button onclick="showSection('add')">Add Transaction</button>
-    <button onclick="showSection('edit')">Edit Transaction</button>
-    <button onclick="showSection('delete')">Delete Transaction</button>
-    <button onclick="showSection('view')">View Transactions</button>
+<div class="container">
+    <h2 class="mt-4">Transaction Management</h2>
+    
+    <!-- Button for adding a new transaction -->
+    <a href="{% url 'add_transaction' %}" class="btn btn-success mt-3">
+        <img src="{% static 'add_transaction.png' %}" alt="Add Transaction"> Add Transaction
+    </a>
+    
+    <!-- Button for viewing all transactions -->
+    <a href="{% url 'view_transactions' %}" class="btn btn-info mt-3">
+        <img src="{% static 'view_transaction.png' %}" alt="View Transactions"> View Transactions
+    </a>
 </div>
-
-<!-- Add Transaction Section -->
-<div id="add" class="section">
-    <h2>Add Transaction</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" name="add_transaction">Add Transaction</button>
-    </form>
-</div>
-
-<!-- View Transactions Section -->
-<div id="view" class="section" style="display:none;">
-    <h2>Transaction List</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for transaction in transactions %}
-            <tr>
-                <td>{{ transaction.date }}</td>
-                <td>{{ transaction.category }}</td>
-                <td>{{ transaction.amount }}</td>
-                <td>
-                    <a href="{% url 'edit_transaction' transaction.id %}">Edit</a>
-                    <a href="{% url 'delete_transaction' transaction.id %}">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-<script>
-    function showSection(section) {
-        document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-        document.getElementById(section).style.display = 'block';
-    }
-</script>
 {% endblock %}
 

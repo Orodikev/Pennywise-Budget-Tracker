@@ -1,24 +1,42 @@
-<table>
-    <thead>
-        <tr>
-            <th>Date</th>      <!-- Transaction date -->
-            <th>Category</th>   <!-- Transaction category -->
-            <th>Amount</th>     <!-- Transaction amount -->
-            <th>Actions</th>    <!-- Edit/Delete actions -->
-        </tr>
-    </thead>
-    <tbody>
-        {% for transaction in transactions %}  <!-- Loop through all transactions -->
-        <tr>
-            <td>{{ transaction.date }}</td>  <!-- Display date -->
-            <td>{{ transaction.get_category_display }}</td>  <!-- Display human-readable category -->
-            <td>{{ transaction.amount }}</td>  <!-- Display amount -->
-            <td>
-                <!-- Links to edit and delete the transaction -->
-                <a href="{% url 'edit_transaction' transaction.id %}">Edit</a> |
-                <a href="{% url 'delete_transaction' transaction.id %}">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <h2 class="mt-4">All Transactions</h2>
+
+    <!-- Table listing all transactions -->
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Reference ID</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.ref_id }}</td>  <!-- Display reference ID -->
+                <td>{{ transaction.amount }}</td>  <!-- Display amount -->
+                <td>{{ transaction.date }}</td>  <!-- Display date -->
+                <td>{{ transaction.get_category_display }}</td>  <!-- Display category -->
+                <td>
+                    <!-- Buttons for editing and deleting transactions -->
+                    <a href="{% url 'edit_transaction' transaction.id %}" class="btn btn-primary">
+                        <img src="{% static 'icons/edit.png' %}" alt="Edit"> Edit
+                    </a>
+                    <a href="{% url 'delete_transaction' transaction.id %}" class="btn btn-danger">
+                        <img src="{% static 'icons/delete.png' %}" alt="Delete"> Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <a href="{% url 'transaction_management' %}" class="btn btn-secondary mt-4">Back to Transaction Management</a>
+</div>
+{% endblock %}
+

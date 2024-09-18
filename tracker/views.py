@@ -39,70 +39,48 @@ def landing_page(request):
 @login_required
 def transaction_list(request):
     transactions = Transaction.objects.filter(user=request.user)
-    return render(request, 'tracker/transaction_list.html', {'transactions': transactions})
+    return render(request, 'transaction_list.html', {'transactions': transactions})
 
-#Transaction management view
+# View for managing the dashboard (only shows buttons now, no transactions)
 def transaction_management(request):
-    # Add Transaction logic
-    if request.method == 'POST' and 'add_transaction' in request.POST:
+    return render(request, 'transaction_management.html')
+
+# View for displaying all transactions in a table
+def view_transactions(request):
+    transactions = Transaction.objects.all()  # Fetch all transactions
+    return render(request, 'view_transactions.html', {'transactions': transactions})  # Pass transactions to template
+
+# View for adding a new transaction
+def add_transaction(request):
+    if request.method == 'POST':
         form = TransactionForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('transaction_management')
+            transaction = form.save(commit=False)
+            transaction.save()  # Save and generate ref_id
+            return redirect('view_transactions')  # Redirect to the view transactions page after adding
+    else:
+        form = TransactionForm()  # Empty form for GET requests
+    return render(request, 'add_transaction.html', {'form': form})
 
-    # View all transactions
-    transactions = Transaction.objects.all()
-
-    context = {
-        'transactions': transactions,
-        'form': TransactionForm(),
-    }
-    return render(request, 'transaction_management.html', context)
-
+# View for editing a transaction
 def edit_transaction(request, id):
-    # Fetch the transaction object or return a 404 if not found
     transaction = get_object_or_404(Transaction, id=id)
-
-    # If this is a POST request, process the form data
     if request.method == 'POST':
         form = TransactionForm(request.POST, instance=transaction)
         if form.is_valid():
-            form.save()  # Save the updated transaction
-            return redirect('transaction_management')  # Redirect to transaction management page
-
-    # If this is a GET request, display the form prefilled with the transaction details
+            form.save()  # Save changes
+            return redirect('view_transactions')  # Redirect to the view transactions page after editing
     else:
-        form = TransactionForm(instance=transaction)
-
-    # Render the form for editing the transaction
+        form = TransactionForm(instance=transaction)  # Prepopulate form with existing transaction data
     return render(request, 'edit_transaction.html', {'form': form})
 
+# View for deleting a transaction
 def delete_transaction(request, id):
-    # Fetch the transaction object by ID or return a 404 if not found
     transaction = get_object_or_404(Transaction, id=id)
-
-    # If the request method is POST, delete the transaction
     if request.method == 'POST':
-        transaction.delete()
-        return redirect('transaction_management')  # Redirect to transaction management page
-
-    # Render a confirmation page (optional)
+        transaction.delete()  # Delete the transaction
+        return redirect('view_transactions')  # Redirect back to view transactions page after deletion
     return render(request, 'delete_transaction.html', {'transaction': transaction})
-
-def add_transaction(request):
-    if request.method == 'POST':
-        date = request.POST['date']
-        amount = request.POST['amount']
-        category = request.POST['category']
-
-        # Create a new Transaction instance without specifying the ref_number
-        transaction = Transaction(date=date, amount=amount, category=category)
-        transaction.save()  # This will automatically generate a unique ref_number
-
-        return redirect('transaction_management')
-
-    # Render the template for adding a transaction
-    return render(request, 'add_transaction.html')
 
 #Budget view
 @login_required

@@ -1,11 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
 {% block content %}
-<h2>Edit Transaction</h2>
-
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Changes</button>
-</form>
-
-<a href="{% url 'transaction_management' %}">Back to Transaction Management</a>
+<div class="container">
+    <h2 class="mt-4">Edit Transaction</h2>
+    
+    <!-- Form for editing an existing transaction -->
+    <form method="post" action="{% url 'edit_transaction' transaction.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Prepopulates form with existing data -->
+        <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+    </form>
+</div>
 {% endblock %}

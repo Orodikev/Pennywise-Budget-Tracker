@@ -3,22 +3,17 @@ from .models import Transaction
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-#Define transaction view
+# TransactionForm inherits from ModelForm to handle form rendering for the Transaction model
 class TransactionForm(forms.ModelForm):
     class Meta:
-        model = Transaction  # Reference the existing Transaction model
-        fields = ['date', 'category', 'amount']  # Specify the fields to be used
+        model = Transaction  # Link the form to the Transaction model
+        fields = ['amount', 'date', 'category']  # Fields to be included in the form
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),
-            'category': forms.Select(choices=[
-                ('food', 'Food'),
-                ('rent', 'Rent'),
-                ('transport', 'Transport'),
-                ('shopping', 'Shopping'),
-                ('clothing', 'Clothing'),
-                ('medication', 'Medication'),
-            ]),
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter amount'}),  # Custom styling for the amount input
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),  # Dropdown date picker
+            'category': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for category selection
         }
+
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
 

@@ -1,5 +1,15 @@
-<form method="POST">
-    {% csrf_token %}  <!-- CSRF protection for security -->
-    {{ form.as_p }}    <!-- Display the form as paragraphs -->
-    <button type="submit">Add Transaction</button>  <!-- Submit button -->
-</form>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <h2 class="mt-4">Add Transaction</h2>
+    
+    <!-- Form for adding a new transaction -->
+    <form method="post" action="{% url 'add_transaction' %}">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Renders the form fields (amount, date, category) -->
+        <button type="submit" class="btn btn-primary mt-3">Add Transaction</button>
+    </form>
+</div>
+{% endblock %}
+
